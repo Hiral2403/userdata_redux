@@ -10,7 +10,7 @@ const initialState = JSON.parse(localStorage.getItem("users")) || defaultUsers;
 
 const userSlice = createSlice({
     name: "users",
-    initialState,
+    initialState,      
     reducers: {
         addUser: (state, action) => {
             state.push(action.payload);
