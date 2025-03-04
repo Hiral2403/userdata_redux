@@ -1,31 +1,33 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { userList } from "../Data";
+
+const defaultUsers = [
+    { id: 1, name: "John Doe", email: "johndoe@gmail.com", image: "https://randomuser.me/api/portraits/men/1.jpg" },
+    { id: 2, name: "Jane Smith", email: "janesmith@gmail.com", image: "https://randomuser.me/api/portraits/women/1.jpg" },
+    { id: 3, name: "Michael Brown", email: "michaelbrown@gmail.com", image: "https://randomuser.me/api/portraits/men/2.jpg" },
+];
+
+const initialState = JSON.parse(localStorage.getItem("users")) || defaultUsers;
 
 const userSlice = createSlice({
     name: "users",
-    initialState: userList,
+    initialState,
     reducers: {
         addUser: (state, action) => {
-            console.log("Action user", action);
-            state.push(action.payload);           
+            state.push(action.payload);
+            localStorage.setItem("users", JSON.stringify(state)); 
         },
-
         updateUser: (state, action) => {
-            const { id, name, email, image } = action.payload;
-            const uu = state.find(user => user.id == id);
-            if (uu) {
-                uu.name = name;
-                uu.email = email;
-                if (image) {
-                    uu.image = image; 
-                }
-            }
+            const updatedState = state.map(user =>
+                user.id == action.payload.id ? { ...user, ...action.payload } : user
+            );
+
+            localStorage.setItem("users", JSON.stringify(updatedState)); 
+            return updatedState; 
         },
-        
         deleteUser: (state, action) => {
-            const id = action.payload;
-            console.log(id);
-            return state.filter(user => user.id != id);
+            const updatedState = state.filter(user => user.id !== action.payload);
+            localStorage.setItem("users", JSON.stringify(updatedState));
+            return updatedState;
         }
     }
 });

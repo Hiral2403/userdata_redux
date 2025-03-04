@@ -19,8 +19,12 @@ const Update = () => {
     const handleImageChange = (e) => {
         const file = e.target.files[0];
         if (file) {
-            setImage(file);
-            setPreview(URL.createObjectURL(file)); 
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onloadend = () => {
+                setImage(reader.result);
+                setPreview(reader.result);
+            };
         }
     };
 
@@ -29,10 +33,10 @@ const Update = () => {
 
         dispatch(
             updateUser({
-                id,
+                id: Number(id),
                 name: uname,
                 email: uemail,
-                image: image ? image.name : existingUser.image 
+                image: image || existingUser.image  // Use new Base64 image or keep the existing one
             })
         );
 
