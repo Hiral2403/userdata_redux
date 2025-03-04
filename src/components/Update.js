@@ -14,8 +14,8 @@ const Update = () => {
     const [preview, setPreview] = useState(existingUser ? existingUser.image : null);
 
     const dispatch = useDispatch();
-    const navigate = useNavigate()
-    
+    const navigate = useNavigate();
+
     const handleImageChange = (e) => {
         const file = e.target.files[0];
         if (file) {
